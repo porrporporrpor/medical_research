@@ -8,7 +8,7 @@ if (($handle = fopen($spreadsheet_url, "r")) !== FALSE) {
     $spreadsheet_data = array();
     while (($data = fgetcsv($handle, ",")) !== FALSE) {
         if($row == 1){ $row++; continue; }
-        array_push($spreadsheet_data, array("age" => $data[4], "weight" => $data[6], "height" => $data[7],
+        array_push($spreadsheet_data, array("timestamp" => $data[0], "age" => $data[4], "weight" => $data[6], "height" => $data[7],
         "fat" => $data[10], "mmr" => $data[11]));
         $row++;
     }

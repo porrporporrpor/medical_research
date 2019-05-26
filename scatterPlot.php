@@ -1,17 +1,19 @@
 <?php
-include 'datasource.php'; 
+echo  $_SERVER['REQUEST_URI'];
 
-$typeCal = "BMI";
+session_start();
+$dataList = $_SESSION['dataList'];
 $dataPoints = array();
+$typeCal = 'BMI';
 
-for($i = 0; $i < sizeof($spreadsheet_data); $i++) {
+for($i = 0; $i < sizeof($dataList); $i++) {
     $result = 0;
     switch($typeCal) {
         case "fat":
-            $result = $spreadsheet_data[$i]['fat'] / $spreadsheet_data[$i]['mmr'];
+            $result = $dataList[$i]['fat'] / $dataList[$i]['mmr'];
             break;
         case "BMI":
-            $result = $spreadsheet_data[$i]['weight'] / pow($spreadsheet_data[$i]['height'] / 100 , 2);
+            $result = $dataList[$i]['weight'] / pow($dataList[$i]['height'] / 100 , 2);
             break;
         case "muscle":
             //code
@@ -26,8 +28,14 @@ for($i = 0; $i < sizeof($spreadsheet_data); $i++) {
         echo "--------------".$typeCal."out of condition--------------<br>";
     }
 
-    $mapping = array("x" => $spreadsheet_data[$i]['age'] , "y" => $result);
+    $mapping = array("x" => $dataList[$i]['age'] , "y" => $result);
     array_push($dataPoints, $mapping);
 }
+
+// remove all session variables
+session_unset(); 
+
+// destroy the session 
+session_destroy();
 
 ?>

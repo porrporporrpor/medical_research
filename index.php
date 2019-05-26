@@ -30,64 +30,46 @@
 
   <div class="container-fluid">
     <div class="row content">
-      <div class="col-md-2 sidenav" id="main_nav" >
+      <div class="col-md-3 sidenav" id="main_nav" >
         <div style="position: relative;">
-        <h4>KMITL</h4><hr>
         <h5>CUSTOMIZE<br>YOUR CHART</h5>
-        <br>
+        <hr>
         <div class="custom-plot ">
           <!-- graph type  -->
-          <form id="graph-type">
+          <form action="setDefault.php" method="GET" id="graph-type">
+
+          <p class="text-left">Select chart type</p>
             <div class="custom-control custom-radio custom-control-inline">
+              <input type="radio" class="custom-control-input" id="customRadio" name="chart" value="scatterplot" checked>
+              <label class="custom-control-label" for="customRadio">Scatter Plot</label>
+            </div>
+    
+            <div class="custom-control custom-radio custom-control-inline">
+              <input type="radio" class="custom-control-input" id="customRadio2" name="chart" value="boxplot">
+              <label class="custom-control-label" for="customRadio2">Box Plot</label>
+            </div>
+            <br><br>
+            <p class="text-left">Select date from</p>
 
-
-              <input type="radio" class="custom-control-input" id="customRadio" name="example" value="lineGraph" checked>
-              <label class="custom-control-label" for="customRadio">Line Graph</label>
+            <div>
+              <input class="form-control" type="date" name="startDate" value="">
             </div>
 
-            <div class="custom-control custom-radio custom-control-inline">
-              <input type="radio" class="custom-control-input" id="customRadio2" name="example" value="dotGraph">
-              <label class="custom-control-label" for="customRadio2">Dot Graph</label>
-            </div><br><br>
-            <p>MONTH</p>
-            <div id="custom-month-select" >
-              <label class="month-select"><input type="checkbox"  value="jan">1</label>
-              <label class="month-select"><input type="checkbox"  value="feb">2</label>
-              <label class="month-select"><input type="checkbox"  value="mar">3</label>
-              <label class="month-select"><input type="checkbox"  value="arp">4</label><br>
-              <label class="month-select"><input type="checkbox"  value="may">5</label>
-              <label class="month-select"><input type="checkbox"  value="jun">6</label>
-              <label class="month-select"><input type="checkbox"  value="jul">7</label>
-              <label class="month-select"><input type="checkbox"  value="aug">8</label><br>
-              <label class="month-select"><input type="checkbox"  value="sep">9</label>
-              <label class="month-select"><input type="checkbox"  value="oct">10</label>
-              <label class="month-select"><input type="checkbox"  value="nov">11</label>
-              <label class="month-select"><input type="checkbox"  value="dec">12</label>
+          <br><p class="text-left">to</p>
+
+            <div>
+              <input type="date" class="form-control"  name="endDate"  value="">
             </div>
             <br>
-            <p>YEAR</p>
-            <div class="dropdown">
-              <span class="custom-dropdown dropdown-toggle" id="dropdownMenuButton" data-toggle="dropdown" >
-               ----- select year -----
-              </span>
-              <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                <a class="dropdown-item" href="#">2018</a>
-                <a class="dropdown-item" href="#">2019</a>
-                <a class="dropdown-item" href="#">2020</a>
-              </div>
-            </div>
-
-            <br>
-            <input class="btn btn-primary" type="submit" value="submit">
-            <a href="dashboard.html"><p style="padding-top: 3%"><i>Upload ?</i></p></a>
-          </form><br>
+          <input type="submit" value="Submit" class="btn btn-sm btn-primary"/>
+          </form>
           
 
       </div>
     </div>
   </div>
-
       <!--end nav side -->
+
       <br><br>
       <div class="col-md contentside">
 
@@ -175,21 +157,21 @@
     <!-- graph 1 -->
     <div id="fat" class="container tab-pane active"><br>
       <figure class="text-center">
-        <?php include 'boxplotDisplay.php' ?>
+        <?php //include 'boxplotDisplay.php' ?>
       </figure>
     </div>
 
     <!-- graph 2 -->
     <div id="bmi" class="container tab-pane fade"><br>
       <figure class="text-center">
-        <?php include 'scatterplot.php' ?>
+        <?php //include 'scatterplot.php' ?>
       </figure>
     </div>
 
     <!-- graph 3 -->
     <div id="muscle" class="container tab-pane fade"><br>
       <figure class="text-center">
-        <?php include 'scatterplot.php' ?>
+        <?php //include 'scatterplot.php' ?>
       </figure>
     </div>
 
@@ -215,16 +197,7 @@
     body.className = body.className? '' : 'with_nav';
     e.preventDefault();
   });
-// add active when click month
-var header = document.getElementById("custom-month-select");
-var btns = header.getElementsByClassName("month-select");
-for (var i = 0; i < btns.length; i++) {
-  btns[i].addEventListener("click", function() {
-    var current = document.getElementsByClassName("active");
-    current[0].className = current[0].className.replace(" active", "");
-    this.className += " active";
-  });
-}
+
 </script>
 
 </body>
