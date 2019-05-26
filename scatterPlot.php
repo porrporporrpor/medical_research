@@ -2,9 +2,14 @@
 echo  $_SERVER['REQUEST_URI'];
 
 session_start();
+if(empty($_SESSION['dataList']) && empty($_SESSION['typeCal'])) {
+    header( 'Location: setDefault.php');
+}
+
 $dataList = $_SESSION['dataList'];
+$typeCal = $_SESSION['typeCal'];
+
 $dataPoints = array();
-$typeCal = 'BMI';
 
 for($i = 0; $i < sizeof($dataList); $i++) {
     $result = 0;

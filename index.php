@@ -40,12 +40,12 @@
 
           <p class="text-left">Select chart type</p>
             <div class="custom-control custom-radio custom-control-inline">
-              <input type="radio" class="custom-control-input" id="customRadio" name="chart" value="scatterplot" checked>
+              <input type="radio" class="custom-control-input" id="customRadio" name="typeChart" value="scatter" checked>
               <label class="custom-control-label" for="customRadio">Scatter Plot</label>
             </div>
     
             <div class="custom-control custom-radio custom-control-inline">
-              <input type="radio" class="custom-control-input" id="customRadio2" name="chart" value="boxplot">
+              <input type="radio" class="custom-control-input" id="customRadio2" name="typeChart" value="boxplot">
               <label class="custom-control-label" for="customRadio2">Box Plot</label>
             </div>
             <br><br>
@@ -61,7 +61,11 @@
               <input type="date" class="form-control"  name="endDate"  value="">
             </div>
             <br>
+            
+          <div name="typeCal" style="display:none;"></div>
+
           <input type="submit" value="Submit" class="btn btn-sm btn-primary"/>
+
           </form>
           
 

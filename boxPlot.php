@@ -2,8 +2,18 @@
 echo  $_SERVER['REQUEST_URI'];
 
 session_start();
+if(empty($_SESSION['dataList']) && empty($_SESSION['typeCal'])) {
+    echo "
+    <form id='boxplot' action='setDefault.php' style='display:none;'>
+        <input type='text' name='typeChart' value='boxplot' />
+    </form>
+    
+    <script> document.getElementById('boxplot').submit(); </script>
+    ";
+}
+
 $dataList = $_SESSION['dataList'];
-$typeCal = "BMI";
+$typeCal = $_SESSION['typeCal'];
 
 $age1_19 = array();
 $age20_29 = array();
@@ -84,30 +94,35 @@ session_unset();
 // destroy the session 
 session_destroy();
 
-function calValuePlot($label, $data) {
-    sort($data);
-    $median = findMedian($data);
-    $minimum = min($data);
-    $maximum = max($data);
-    $q1 = findQuatile(1, $data);
-    $q3 = findQuatile(3, $data);
-    $mapping = array("label" => $label, "y" => array($minimum, $q1, $q3, $maximum, $median));
-    return $mapping;
+function calValuePlot($label, $dataList) {
+    if (sizeof($dataList) >= 4) { //boxplot must have least 4 values
+        sort($dataList);
+        $median = findMedian($dataList);
+        $minimum = min($dataList);
+        $maximum = max($dataList);
+        $q1 = findQuatile(1, $dataList);
+        $q3 = findQuatile(3, $dataList);
+        $mapping = array("label" => $label, "y" => array($minimum, $q1, $q3, $maximum, $median));
+        return $mapping;
+    } else {
+        return array("label" => $label, "y" => null);;
+    }
+    
 }
 
-function findQuatile($k, $data) {
-    $position = $k * ((sizeof($data) + 1) / 4) - 1; //quatile formula = k(n+1)/4 // -1 because index start at 0
-    return ruleOfThree($position, $data);
+function findQuatile($k, $dataList) {
+    $position = $k * ((sizeof($dataList) + 1) / 4) - 1; //quatile formula = k(n+1)/4 // -1 because index start at 0
+    return ruleOfThree($position, $dataList);
 }
 
-function findMedian($data) {
-    $position = ((sizeof($data) + 1) / 2) - 1; //median formula = (n+1)/2 // -1 because index start at 0
-    return ruleOfThree($position, $data);
+function findMedian($dataList) {
+    $position = ((sizeof($dataList) + 1) / 2) - 1; //median formula = (n+1)/2 // -1 because index start at 0
+    return ruleOfThree($position, $dataList);
 }
 
-function ruleOfThree($position, $data) {
-    $floorNum = $data[floor($position)];
-    $ceilNum = $data[ceil($position)];
+function ruleOfThree($position, $dataList) {
+    $floorNum = $dataList[floor($position)];
+    $ceilNum = $dataList[ceil($position)];
     $ratio = fmod($position,1);
     return $floorNum + ($ratio * ($ceilNum - $floorNum));
 }
