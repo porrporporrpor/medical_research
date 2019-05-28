@@ -1,6 +1,5 @@
 @import url('https://fonts.googleapis.com/css?family=Kanit');
 
-
 body {
   font-family: 'Kanit';
 }
@@ -27,6 +26,8 @@ a:focus {
   height: 100%;
   text-align: center;
   padding: 1em;
+  position: fixed;
+  z-index: 2;
 }
 
 .text-left {
@@ -36,13 +37,15 @@ a:focus {
 
 .contentside {
   background: #ebeef5;
-  padding:1em 5em 2em 5em;
+  padding:1em 2em 2em 2em;
 }
 
 .graph-canvas {
   background:#FFF;
   height: auto;
   padding: 0.5em;
+  border: none;
+  border-radius: 10px 10px;
 }
 
 .custom-card {
@@ -54,5 +57,18 @@ a:focus {
 .card {
   border: none;
   border-radius: 10px 10px;
-  box-shadow: 5px 5px 20px #d7d8da;
+  box-shadow: 0 2px 4px 0 rgba(0,0,0,0.16);
+}
+
+.click-cursor {
+  cursor: pointer;
+}
+
+#blur-body {
+  width:100%;
+  height: 100%;
+  background: rgba(0,0,0,0.4);
+  z-index: 1;
+  position: absolute;
+  display: none;
 }

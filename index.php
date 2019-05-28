@@ -1,7 +1,13 @@
+<?php 
+session_start(); 
+if(empty($_SESSION['dataList']) && empty($_SESSION['typeCal'])) {
+  header( 'Location: setDefault.php');
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <title>BMI</title>
+  <title>Research</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   
@@ -22,6 +28,8 @@
   <!--bootstrap javascript-->
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js"></script>
 
+  <!-- canvasJs -->
+  <script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
   
 
 </head>
@@ -30,13 +38,15 @@
 
   <div class="container-fluid">
     <div class="row content">
-      <div class="col-md-3 sidenav" id="main_nav" >
+      <div class="col-md-3 col-xs-1 sidenav" id="main_nav" >
         <div style="position: relative;">
+        <h3 onclick="closeNav()" class="fa fa-times click-cursor" style="float:right"></h3>
         <h5>CUSTOMIZE<br>YOUR CHART</h5>
         <hr>
-        <div class="custom-plot ">
-          <!-- graph type  -->
-          <form action="setDefault.php" method="GET" id="graph-type">
+        
+        <div class="custom-plot">
+          <!-- customize chart  -->
+          <form action="setDefault.php" method="GET" id="customizeChart">
 
           <p class="text-left">Select chart type</p>
             <div class="custom-control custom-radio custom-control-inline">
@@ -52,17 +62,17 @@
             <p class="text-left">Select date from</p>
 
             <div>
-              <input class="form-control" type="date" name="startDate" value="">
+              <input class="form-control" type="date" id="startDate" name="startDate" value="">
             </div>
 
           <br><p class="text-left">to</p>
 
             <div>
-              <input type="date" class="form-control"  name="endDate"  value="">
+              <input type="date" class="form-control" id="endDate" name="endDate"  value="">
             </div>
             <br>
             
-          <div name="typeCal" style="display:none;"></div>
+          <input id="typeCal" name="typeCal" style="display:none" />
 
           <input type="submit" value="Submit" class="btn btn-sm btn-primary"/>
 
@@ -74,19 +84,19 @@
   </div>
       <!--end nav side -->
 
+      <div id="blur-body"></div>
+
       <br><br>
       <div class="col-md contentside">
 
-        <a href="#main_nav"><h3 id="menuclick" class="fas fa-bars" style="position: absolute;"></h3></a>
-        <h4 class="text-center"><span class="fas fa-columns"></span> Upload</h4><hr>
-
-        <br>      
+        <h3 onclick="openNav()" class="fas fa-bars click-cursor" style="position: absolute;"></h3>
+        <h4 class="text-center"><span class="fas fa-columns"></span> Research</h4><hr>
 
         <!-- minicard section -->
         <div id="minicard">
           <div class="card-columns">
 
-            <!-- male card -->
+             <!-- male card -->
             <div id="male-card" class="card">
              <div class="card-body">
               <div class="row">
@@ -94,14 +104,14 @@
                   <h1 class="fas fa-male"></h1>
                 </span>
                 <span class="column col-md-8" style="float:right">
-                 <h3>00</h3>
+                 <h3><?php echo $_SESSION['male']; ?></h3>
                  <small>Male</small>
                </span>
              </div>
            </div>
          </div>
 
-         <!-- female card -->
+          <!-- female card -->
          <div id="female-card" class="card">
            <div class="card-body">
             <div class="row">
@@ -109,14 +119,14 @@
                 <h1 class="fas fa-female"></h1>
               </span>
               <span class="column col-md-8" style="float:right">
-               <h3>00</h3>
+               <h3><?php echo $_SESSION['female']; ?></h3>
                <small>Female</small>
              </span>
            </div>
          </div>
        </div>
 
-       <!-- average card -->
+        <!-- average card -->
        <div id="average-card" class="card">
          <div class="card-body">
           <div class="row">
@@ -124,62 +134,41 @@
               <h1 class="fas fa-chart-line"></h1>
             </span>
             <span class="column col-md-8" style="float:right">
-             <h3>00.0</h3>
-             <small>Average</small>
+             <h3><?php echo $_SESSION['male']+$_SESSION['female']; ?></h3>
+             <small>Total</small>
            </span>
          </div>
        </div>
      </div>
 
-   </div>
+    </div>
  </div>
-
- <br>
 
  <!-- overview section -->
  <div id="overview">
   <h4 style="display:inline-block">Overview</h4>
-
-  <br>
-
-  <!-- Nav tabs -->
-  <ul class="nav nav-tabs nav-justified" role="tablist" style="width: 100%">
-    <li class="nav-item custom-card">
-      <a class="nav-link active" data-toggle="tab" href="#fat">Fat/Muscle Mass Ratio(kg/Kg)</a>
-    </li>
-    <li class="nav-item custom-card">
-      <a class="nav-link" data-toggle="tab" href="#bmi">BMI(Kg/M<sup>2</sup>)</a>
-    </li>
-    <li class="nav-item custom-card">
-      <a class="nav-link" data-toggle="tab" href="#muscle">Muscle Mass Index(Kg/M<sup>2</sup>)</a>
-    </li>
-  </ul>
-
-  <!-- Tab panes -->
-  <div class="tab-content graph-canvas">
-
-    <!-- graph 1 -->
-    <div id="fat" class="container tab-pane active"><br>
-      <figure class="text-center">
-        <?php //include 'boxplotDisplay.php' ?>
-      </figure>
-    </div>
-
-    <!-- graph 2 -->
-    <div id="bmi" class="container tab-pane fade"><br>
-      <figure class="text-center">
-        <?php //include 'scatterplot.php' ?>
-      </figure>
-    </div>
-
-    <!-- graph 3 -->
-    <div id="muscle" class="container tab-pane fade"><br>
-      <figure class="text-center">
-        <?php //include 'scatterplot.php' ?>
-      </figure>
-    </div>
-
+    <!-- select view chart by type -->
+    <div class="btn-group dropleft" style="float:right; padding-right: 10px;">
+  <button class="btn btn-info btn-sm dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+    Select type
+  </button>
+  <div class="dropdown-menu" style="cursor:pointer">
+    <a class="dropdown-item" id="fat" onclick="setTypeCal('fat')">Fat</a>
+    <a class="dropdown-item" id="BMI" onclick="setTypeCal('BMI')">BMI</a>
+    <a class="dropdown-item" id="muscle" onclick="setTypeCal('muscle')">Muscle Mass Index</a>
+    <a class="dropdown-item" id="handGrip" onclick="setTypeCal('handGrip')">Hand Grip</a>
+    <a class="dropdown-item" id="meterTime" onclick="setTypeCal('meterTime')">6 Meter Time</a>
   </div>
+  
+</div>
+  <!-- Tab panes -->
+  <div class=" graph-canvas">
+    <div id="displayChart" class="container tab-pane active text-center"><br>
+      <?php include 'displayChart.php' ?>
+    </div>
+<br>
+</div>
+  
 
 </div>
 <!-- end overview section -->
@@ -195,12 +184,39 @@
 </div>
 
 <script type="text/javascript">
-  var nav = document.getElementById('menuclick'),
-  body = document.body;
-  nav.addEventListener('click', function(e) {
-    body.className = body.className? '' : 'with_nav';
-    e.preventDefault();
-  });
+  function closeIt()
+  {
+    <?php session_destroy(); ?>
+    return undefined;
+  }
+  window.onbeforeunload = closeIt;
+
+  function setTypeCal(typeCal) {
+    let currentType = '<?php echo $_SESSION['typeChart']; ?>';
+    let currentStart = '<?php echo $_SESSION['startDate']; ?>';
+    let currentEnd = '<?php echo $_SESSION['endDate']; ?>';
+
+    document.getElementById('typeCal').value = typeCal;
+    document.getElementById('startDate').value = currentStart;
+    document.getElementById('endDate').value = currentEnd;
+    if(currentType == 'boxplot') {
+      document.getElementsByName('typeChart')[1].checked = true;
+    }
+
+    document.getElementById('customizeChart').submit();
+  }
+
+  function openNav() {
+  document.getElementById("main_nav").style.display = "block";
+  document.getElementById("blur-body").style.display = "block";
+  document.body.style.overflow = "hidden";
+}
+
+function closeNav() {
+  document.getElementById("main_nav").style.display = "none";
+  document.getElementById("blur-body").style.display = "none";
+  document.body.style.overflow = "visible";
+}
 
 </script>
 

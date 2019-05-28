@@ -2,6 +2,7 @@
 echo  $_SERVER['REQUEST_URI'];
 
 session_start();
+
 if(empty($_SESSION['dataList']) && empty($_SESSION['typeCal'])) {
     header( 'Location: setDefault.php');
 }
@@ -15,19 +16,19 @@ for($i = 0; $i < sizeof($dataList); $i++) {
     $result = 0;
     switch($typeCal) {
         case "fat":
-            $result = $dataList[$i]['fat'] / $dataList[$i]['mmr'];
+            $result = $dataList[$i]['fat'] / $dataList[$i]['muscle'];
             break;
         case "BMI":
             $result = $dataList[$i]['weight'] / pow($dataList[$i]['height'] / 100 , 2);
             break;
         case "muscle":
-            //code
+            $result = $dataList[$i]['muscle'];
             break;
-        case "handGlip":
-            //code
+        case "handGrip":
+            $result = $dataList[$i]['handGrip'];
             break;
         case "meterTime":
-            //code
+            $result = $dataList[$i]['meterTime'];
             break;
         default:
         echo "--------------".$typeCal."out of condition--------------<br>";
@@ -37,10 +38,6 @@ for($i = 0; $i < sizeof($dataList); $i++) {
     array_push($dataPoints, $mapping);
 }
 
-// remove all session variables
-session_unset(); 
-
-// destroy the session 
-session_destroy();
-
+$_SESSION['dataPoints'] = $dataPoints;
+header( 'Location: index.php' );
 ?>

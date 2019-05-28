@@ -2,15 +2,6 @@
 echo  $_SERVER['REQUEST_URI'];
 
 session_start();
-if(empty($_SESSION['dataList']) && empty($_SESSION['typeCal'])) {
-    echo "
-    <form id='boxplot' action='setDefault.php' style='display:none;'>
-        <input type='text' name='typeChart' value='boxplot' />
-    </form>
-    
-    <script> document.getElementById('boxplot').submit(); </script>
-    ";
-}
 
 $dataList = $_SESSION['dataList'];
 $typeCal = $_SESSION['typeCal'];
@@ -25,22 +16,22 @@ $age60 = array();
 // for check value (such as fat, BMI, etc.) each age range
 for($i=0; $i < sizeof($dataList); $i++) {
     // choose option of value to calculate
-    $result = 0;
+    $result = $dataList[$i];
     switch($typeCal) {
         case "fat":
-            $result = $dataList[$i]['fat'] / $dataList[$i]['mmr'];
+            $result = $dataList[$i]['fat'] / $dataList[$i]['muscle'];
             break;
         case "BMI":
             $result = $dataList[$i]['weight'] / pow($dataList[$i]['height'] / 100 , 2);
             break;
         case "muscle":
-            //code
+            $result = $dataList[$i]['muscle'];
             break;
-        case "handGlip":
-            //code
+        case "handGrip":
+            $result = $dataList[$i]['handGrip'];
             break;
         case "meterTime":
-            //code
+            $result = $dataList[$i]['meterTime'];
             break;
         default:
         echo "--------------".$typeCal."out of condition--------------<br>";
@@ -88,11 +79,8 @@ array_push($dataPoints, $mapping);
 $mapping = calValuePlot("over 60 years old", $age60);
 array_push($dataPoints, $mapping);
 
-// remove all session variables
-session_unset(); 
-
-// destroy the session 
-session_destroy();
+$_SESSION['dataPoints'] = $dataPoints;
+header( 'Location: index.php' );
 
 function calValuePlot($label, $dataList) {
     if (sizeof($dataList) >= 4) { //boxplot must have least 4 values
