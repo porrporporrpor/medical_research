@@ -1,0 +1,18 @@
+# HTID:9660236: DO NOT REMOVE OR MODIFY THIS LINE AND THE LINES BELOW
+php_value display_errors 1
+# DO NOT REMOVE OR MODIFY THIS LINE AND THE LINES ABOVE HTID:9660236:
+php_flag session.auto_start on
+
+<IfModule mod_rewrite.c>
+        RewriteBase /
+        Options +FollowSymlinks -MultiViews
+        RewriteEngine on
+        # to make `/path/index.php` to /path/
+        RewriteCond %{THE_REQUEST} ^GET\s(.*/)index\.php [NC]
+        RewriteRule . %1 [NE,R=301,L]
+        RewriteCond %{THE_REQUEST} ^GET\s.+\.php [NC]
+        RewriteRule ^(.+)\.php$ /$1 [NE,R=301,L,NC]
+        RewriteCond %{REQUEST_URI} !\.php$ [NC]
+        RewriteCond %{REQUEST_FILENAME}.php -f
+        RewriteRule . %{REQUEST_URI}.php [L]
+</IfModule>
