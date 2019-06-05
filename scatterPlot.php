@@ -1,10 +1,8 @@
 <?php
-echo  $_SERVER['REQUEST_URI'];
-
-session_start();
-
+echo "<script> if(history.replaceState) history.replaceState({}, '', '/'); </script>";
 if(empty($_SESSION['dataList']) && empty($_SESSION['typeCal'])) {
-    header( 'Location: setDefault.php');
+    echo "pass";
+    echo("<script>location.href = 'setDefault.php';</script>");
 }
 
 $dataList = $_SESSION['dataList'];
@@ -31,7 +29,7 @@ for($i = 0; $i < sizeof($dataList); $i++) {
             $result = $dataList[$i]['meterTime'];
             break;
         default:
-        echo "--------------".$typeCal."out of condition--------------<br>";
+        echo "--------------typeCal ".$typeCal." out of condition--------------<br>";
     }
 
     $mapping = array("x" => $dataList[$i]['age'] , "y" => $result);
@@ -39,5 +37,6 @@ for($i = 0; $i < sizeof($dataList); $i++) {
 }
 
 $_SESSION['dataPoints'] = $dataPoints;
-header( 'Location: index.php' );
+
+echo("<script>location.href = 'index.php';</script>");
 ?>

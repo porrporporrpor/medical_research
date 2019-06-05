@@ -1,6 +1,7 @@
 <?php
 require_once 'datasource.php';
-echo  $_SERVER['REQUEST_URI'];
+date_default_timezone_set('UTC');
+echo "<script> if(history.replaceState) history.replaceState({}, '', '/'); </script>";
 
 $typeChart = !empty($_GET['typeChart']) ? $_GET['typeChart'] : 'scatter';
 $startDate = !empty($_GET['startDate']) ? $_GET['startDate'] : '2019-05-23';
@@ -30,7 +31,6 @@ for($i=0; $i< sizeof($spreadsheet_data) ; $i++) {
   }
 }
 
-session_start();
 $_SESSION["dataList"] = $dataList;
 $_SESSION["typeChart"] = $typeChart;
 $_SESSION["typeCal"] = $typeCal;
@@ -40,9 +40,9 @@ $_SESSION["male"] = $male;
 $_SESSION["female"] = $female;
 
 if($typeChart == "scatter") {
-    header( 'Location: scatterPlot.php' );
+    echo("<script>location.href = 'scatterPlot.php';</script>");
 } else {
-    header( 'Location: boxPlot.php' );
+    echo("<script>location.href = 'boxPlot.php';</script>");
 }
 
 ?>

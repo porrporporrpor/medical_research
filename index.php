@@ -1,7 +1,6 @@
-<?php 
-session_start(); 
+<?php
 if(empty($_SESSION['dataList']) && empty($_SESSION['typeCal'])) {
-  header( 'Location: setDefault.php');
+  echo("<script>location.href = 'setDefault.php';</script>");
 }
 ?>
 <!DOCTYPE html>

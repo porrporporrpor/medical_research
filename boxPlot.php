@@ -1,8 +1,5 @@
 <?php
-echo  $_SERVER['REQUEST_URI'];
-
-session_start();
-
+echo "<script> if(history.replaceState) history.replaceState({}, '', '/'); </script>";
 $dataList = $_SESSION['dataList'];
 $typeCal = $_SESSION['typeCal'];
 
@@ -34,7 +31,7 @@ for($i=0; $i < sizeof($dataList); $i++) {
             $result = $dataList[$i]['meterTime'];
             break;
         default:
-        echo "--------------".$typeCal."out of condition--------------<br>";
+        echo "--------------typeCal ".$typeCal." out of condition--------------<br>";
     }
 
     $age = $dataList[$i]['age'];
@@ -56,11 +53,11 @@ for($i=0; $i < sizeof($dataList); $i++) {
         case ($age >= 50 && $age <=59):
             array_push($age50_59 , $result);
             break;
-        case ($age > 60):
+        case ($age >= 60):
             array_push($age60 , $result);
             break;
         default:
-        echo "--------------".$age."out of condition--------------<br>";
+        echo "--------------age ".$age." out of condition--------------<br>";
     }
 }
 
@@ -80,7 +77,7 @@ $mapping = calValuePlot("over 60 years old", $age60);
 array_push($dataPoints, $mapping);
 
 $_SESSION['dataPoints'] = $dataPoints;
-header( 'Location: index.php' );
+echo("<script>location.href = 'index.php';</script>");
 
 function calValuePlot($label, $dataList) {
     if (sizeof($dataList) >= 4) { //boxplot must have least 4 values
